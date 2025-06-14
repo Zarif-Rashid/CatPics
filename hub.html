@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Cat from API</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 2em;
+    }
+    img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    button {
+      margin-top: 1em;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Here’s a random cat!</h1>
+  <div id="image-container">Loading...</div>
+  <button onclick="loadCat()">Get New Cat</button>
 
+  <script>
+    function loadCat() {
+      const container = document.getElementById('image-container');
+      container.textContent = 'Loading...';
+
+      fetch('https://api.thecatapi.com/v1/images/search')
+        .then(response => response.json())
+        .then(data => {
+          const cat = data[0];
+          const img = document.createElement('img');
+          img.src = cat.url;
+          img.alt = 'A random cat';
+          img.width = 400;
+          img.height = 300;
+
+          container.innerHTML = '';
+          container.appendChild(img);
+        })
+        .catch(error => {
+          container.textContent = 'Failed to load cat 😿';
+          console.error('Error fetching cat:', error);
+        });
+    }
+
+    // Load the first cat on page load
+    loadCat();
+  </script>
+</body>
+</html>
